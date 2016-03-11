@@ -11,7 +11,7 @@ after_success:
 
 after_success:
   - cp $JAR_FILE $TRAVIS_BUILD_DIR/docker
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
   - export REPO=containersol/mesos-framework
   - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "snapshot"; else echo $TRAVIS_BRANCH ; fi`
   - docker build -f Dockerfile -t $REPO:$COMMIT $TRAVIS_BUILD_DIR/docker
