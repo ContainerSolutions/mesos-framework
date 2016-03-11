@@ -43,9 +43,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.containersolutions.mesos</groupId>
+            <groupId>com.github.containersolutions.mesos-starter</groupId>
             <artifactId>spring-boot-starter-mesos</artifactId>
-            <version>CUSTOM</version>
+            <version>master-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
