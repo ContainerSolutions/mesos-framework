@@ -1,4 +1,4 @@
-package org.apache.mesos;
+package com.containersolutions.mesosframework;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
