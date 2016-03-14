@@ -1,0 +1,28 @@
+language: java
+sudo: required
+services:
+  - docker
+jdk:
+  - oraclejdk8
+
+after_success:
+  - "mvn -DskipTests package"
+  - export JAR_FILE=$(ls target/*.jar)
+  - cp $JAR_FILE $TRAVIS_BUILD_DIR/docker
+  - docker login -e $DOCKER_EMAIL -u $DOCKER_USER -p $DOCKER_PASS
+  - export REPO=containersol/mesos-framework
+  - export TAG=`if [ "$TRAVIS_BRANCH" == "master" ]; then echo "snapshot"; else echo $TRAVIS_BRANCH ; fi`
+  - docker build -t $REPO:$COMMIT $TRAVIS_BUILD_DIR/docker
+  - docker tag $REPO:$COMMIT $REPO:$TAG
+  - docker tag $REPO:$COMMIT $REPO:travis-$TRAVIS_BUILD_NUMBER
+  - docker push $REPO
+
+before_deploy:
+  - echo $(ls $TRAVIS_BUILD_DIR)
+deploy:
+  provider: releases
+  api_key: "$GITHUB_OAUTH_TOKEN"
+  file: $JAR_FILE
+  skip_cleanup: true
+  on:
+    tags: true

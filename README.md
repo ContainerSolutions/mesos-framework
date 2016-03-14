@@ -9,7 +9,7 @@ Writing Frameworks for Apache Mesos is hard. We created the [Mesos Starter](www.
 
 Mesos-Framework is a pre-built version of Mesos-Starter, that allows users to run a binary or Docker container as a Framework via a single configuration file.
 
-# Usage
+# Quick start
 Once you have decided upon a binary or Docker container to run, you simply need to call:
 
 `docker run -d containersol/mesos-framework:latest --spring.config.location=your.application.properties`
@@ -20,9 +20,19 @@ or if you don't want to use Docker:
 
 * Note, this files have not been released yet. These commands won't work.
 
-# Properties file
-All of you applications configuration lives inside the properties file. Please see the [examples](./docs/examples).
+# Application properties
+All options can be specified as either:
+- A cli parameter: `--mesos.command=pwd`
+- A properties file: `mesos.command=pwd`
+- Java options: `-Dmesos.command=pwd`
+- Environmental variables: `MESOS_COMMAND=pwd`
+In that order of preference.
 
-All of the configration options are specified by the [Mesos Starter](www.github.com/containersolutions/mesos-starter) project.
+To pass a configuration file, the following property must be set:
+- `--spring.config.location=my.properties` (Or the env var `SPRING_CONFIG_LOCATION`, etc.)
 
-But you can also provide new options with `${my.option}` inside the properties file. Now you can provide that option with `--my.option=Hi!`
+Valid configration options are specified by the [Mesos Starter](www.github.com/containersolutions/mesos-starter) project.
+
+Please see the [examples](./docs/examples) folder for examples.
+
+You can also provide new options with `${my.option}` inside the properties file. Now you can provide that option with `--my.option=Hi!`
