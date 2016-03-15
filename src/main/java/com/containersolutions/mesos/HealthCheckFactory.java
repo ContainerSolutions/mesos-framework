@@ -5,12 +5,14 @@ import com.containersolutions.mesos.scheduler.config.FrameworkMesosConfigPropert
 import org.apache.mesos.Protos;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.List;
+
 public class HealthCheckFactory implements MesosProtoFactory<Protos.HealthCheck> {
     @Autowired
     FrameworkMesosConfigProperties mesosConfig;
 
     @Override
-    public Protos.HealthCheck create() {
+    public Protos.HealthCheck create(List<Protos.Resource> resources) {
         // Dev note: HealthCheck does not work in 0.25: https://issues.apache.org/jira/browse/MESOS-3738
         Protos.HealthCheck healthDefault = Protos.HealthCheck.getDefaultInstance();
         if (mesosConfig.getHealthCheck() == null) {
