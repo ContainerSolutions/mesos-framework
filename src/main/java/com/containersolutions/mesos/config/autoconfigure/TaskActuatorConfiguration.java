@@ -1,6 +1,5 @@
-package com.containersolutions.mesosframework.config.autoconfigure;
+package com.containersolutions.mesos.config.autoconfigure;
 
-import com.containersolutions.mesos.config.autoconfigure.MesosSchedulerConfiguration;
 import com.containersolutions.mesos.scheduler.events.StatusUpdateEvent;
 import com.containersolutions.mesos.scheduler.state.StateRepository;
 import org.apache.mesos.Protos;
@@ -9,9 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.AutoConfigureBefore;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,9 +18,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Configuration
-@ConditionalOnClass(HealthIndicator.class)
-@AutoConfigureBefore({org.springframework.boot.actuate.autoconfigure.EndpointAutoConfiguration.class})
-@AutoConfigureAfter({MesosSchedulerConfiguration.class})
 public class TaskActuatorConfiguration implements ApplicationListener<StatusUpdateEvent> {
     @Autowired
     StateRepository stateRepository;
@@ -51,7 +44,6 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
                     Map<String, Protos.TaskStatus> state = getTasksForState(taskState);
                     builder.withDetail(taskState.name(), state.size());
                 }
-
             }
         };
     }
