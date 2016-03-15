@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.containersolutions.mesosframework.config.autoconfigure.TaskActuatorConfiguration
+com.containersolutions.mesos.config.autoconfigure.TaskActuatorConfiguration
