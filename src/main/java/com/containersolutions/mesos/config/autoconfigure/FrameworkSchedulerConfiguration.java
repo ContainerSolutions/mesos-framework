@@ -52,7 +52,7 @@ public class FrameworkSchedulerConfiguration {
             Protos.TaskInfo taskInfo = taskInfoFactoryDocker.create(taskId, offer, resources);
             Protos.TaskInfo built = Protos.TaskInfo.newBuilder()
                     .mergeFrom(taskInfo)
-                    .setHealthCheck(healthCheckFactory.create(resources))
+                    .setHealthCheck(healthCheckFactory.create())
                     .build();
             logger.debug(built);
             return built;
@@ -67,7 +67,7 @@ public class FrameworkSchedulerConfiguration {
             Protos.TaskInfo taskInfo = taskInfoFactoryCommand.create(taskId, offer, resources);
             Protos.TaskInfo built = Protos.TaskInfo.newBuilder()
                     .mergeFrom(taskInfo)
-                    .setHealthCheck(healthCheckFactory.create(resources))
+                    .setHealthCheck(healthCheckFactory.create())
                     .build();
             logger.debug(built);
             return built;
