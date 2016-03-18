@@ -1,6 +1,8 @@
 package com.containersolutions.mesos.config.autoconfigure;
 
 import com.containersolutions.mesos.HealthCheckFactory;
+import com.containersolutions.mesos.controllers.CountController;
+import com.containersolutions.mesos.scheduler.InstanceCount;
 import com.containersolutions.mesos.scheduler.TaskInfoFactory;
 import com.containersolutions.mesos.scheduler.TaskInfoFactoryCommand;
 import com.containersolutions.mesos.scheduler.TaskInfoFactoryDocker;
@@ -9,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mesos.Protos;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -72,5 +75,11 @@ public class FrameworkSchedulerConfiguration {
             logger.debug(built);
             return built;
         };
+    }
+
+    @Bean
+    @ConditionalOnBean(value = InstanceCount.class)
+    public CountController countController(InstanceCount instanceCount) {
+        return new CountController(instanceCount);
     }
 }
