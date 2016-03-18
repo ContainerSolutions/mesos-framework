@@ -48,8 +48,8 @@ public class FrameworkSchedulerConfiguration {
     @ConditionalOnProperty(prefix = "mesos.docker", name = {"image"})
     @Primary
     public TaskInfoFactory taskInfoFactoryDocker(@Qualifier("defaultTaskInfoFactoryDocker") TaskInfoFactoryDocker taskInfoFactoryDocker, HealthCheckFactory healthCheckFactory) {
-        return (taskId, offer, resources) -> {
-            Protos.TaskInfo taskInfo = taskInfoFactoryDocker.create(taskId, offer, resources);
+        return (taskId, offer, resources, executionParameters) -> {
+            Protos.TaskInfo taskInfo = taskInfoFactoryDocker.create(taskId, offer, resources, executionParameters);
             Protos.TaskInfo built = Protos.TaskInfo.newBuilder()
                     .mergeFrom(taskInfo)
                     .setHealthCheck(healthCheckFactory.create(resources))
@@ -63,8 +63,8 @@ public class FrameworkSchedulerConfiguration {
     @ConditionalOnMissingBean(name = "frameworkTaskInfoFactoryDocker")
     @Primary
     public TaskInfoFactory taskInfoFactoryCommand(@Qualifier("defaultTaskInfoFactoryCommand") TaskInfoFactoryCommand taskInfoFactoryCommand, HealthCheckFactory healthCheckFactory) {
-        return (taskId, offer, resources) -> {
-            Protos.TaskInfo taskInfo = taskInfoFactoryCommand.create(taskId, offer, resources);
+        return (taskId, offer, resources, executionParameters) -> {
+            Protos.TaskInfo taskInfo = taskInfoFactoryCommand.create(taskId, offer, resources, executionParameters);
             Protos.TaskInfo built = Protos.TaskInfo.newBuilder()
                     .mergeFrom(taskInfo)
                     .setHealthCheck(healthCheckFactory.create(resources))

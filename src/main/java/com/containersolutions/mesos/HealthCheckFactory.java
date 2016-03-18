@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class HealthCheckFactory implements MesosProtoFactory<Protos.HealthCheck> {
+public class HealthCheckFactory implements MesosProtoFactory<Protos.HealthCheck, List<Protos.Resource>> {
     @Autowired
     FrameworkMesosConfigProperties mesosConfig;
 
