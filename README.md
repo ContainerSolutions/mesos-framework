@@ -12,13 +12,11 @@ Mesos-Framework is a pre-built version of Mesos-Starter, that allows users to ru
 # Quick start
 Once you have decided upon a binary or Docker container to run, you simply need to call:
 
-`docker run -d containersol/mesos-framework:latest --spring.config.location=your.application.properties`
+`docker run -d containersol/mesosframework:latest --spring.config.location=your.application.properties`
 
 or if you don't want to use Docker:
 
-`java -Djava.library.path=/usr/local/lib -jar mesos-framework-0.0.1.jar --spring.config.location=your.application.properties`
-
-* Note, this files have not been released yet. These commands won't work.
+`java -jar mesosframework-0.0.1.jar --spring.config.location=your.application.properties`
 
 # Application properties
 All options can be specified as either:
@@ -36,3 +34,32 @@ Valid configration options are specified by the [Mesos Starter](www.github.com/c
 Please see the [examples](./docs/examples) folder for examples.
 
 You can also provide new options with `${my.option}` inside the properties file. Now you can provide that option with `--my.option=Hi!`
+
+# Extensions to the Mesos-starter project
+This project adds to the Mesos-starter project on the following points:
+
+## Horizontal scaling
+It adds an endpoint at the following location to control the number of instances in the cluster. The endpoint matches the properties file definition of the same name:
+
+`GET /mesos/resources/count` Returns the current number of requested instances. For example to get the current number of instances:
+
+```
+$ curl -s http://localhost:8080/mesos/resources/count
+3
+```
+
+`POST /mesos/resources/count` with a body of type `Integer` will set the number of requested instances. For example, to set the number of instances to 1:
+
+```
+$ curl -XPOST -H 'Content-Type: text/plain' http://localhost:8080/mesos/resources/count -d 1
+```
+
+## Healthcheck
+An extra healthchecks to monitor the state of the running tasks is exposed.
+ 
+`GET /health` returns the health of the running tasks. If `count == running instances` the health will be `UP`. For example:
+ 
+```
+$ curl http://localhost:8080/health
+{"status":"UP","task":{"status":"UP","expectedInstances":1,"instances":1,"TASK_STAGING":0,"TASK_STARTING":0,"TASK_RUNNING":3,"TASK_KILLING":0,"TASK_FINISHED":0,"TASK_FAILED":0,"TASK_KILLED":0,"TASK_LOST":0,"TASK_ERROR":0},"diskSpace":{"status":"UP","total":9896046592,"free":2796249088,"threshold":10485760}}%  
+```
