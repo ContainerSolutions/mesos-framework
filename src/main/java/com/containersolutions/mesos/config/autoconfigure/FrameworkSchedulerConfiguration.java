@@ -37,6 +37,7 @@ public class FrameworkSchedulerConfiguration {
     }
 
     @Bean(name = "defaultTaskInfoFactoryDocker")
+    @ConditionalOnProperty(prefix = "mesos.docker", name = {"image"})
     public TaskInfoFactoryDocker defaulTaskInfoFactoryDocker() {
         return new TaskInfoFactoryDocker();
     }
