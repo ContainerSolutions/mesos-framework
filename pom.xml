@@ -55,7 +55,7 @@
         <dependency>
             <groupId>com.github.containersolutions.mesos-starter</groupId>
             <artifactId>spring-boot-starter-mesos</artifactId>
-            <version>a72e34bc3d</version>
+            <version>084fcd1daebb56ce9ad93b20015bdf9b8fa0341e</version>
         </dependency>
 
         <!--<dependency>-->
