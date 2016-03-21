@@ -5,8 +5,8 @@
   "instances": 1,
   "cmd": "mv *.jar scheduler.jar ; java -jar scheduler.jar --spring.config.location=./hello-world.properties --mesos.zookeeper.server=$ZOOKEEPER:2181",
   "uris": [
-    "https://github.com/ContainerSolutions/mesos-framework/releases/download/0.1.0-alpha.0/mesos-framework-0.0.1.jar",
-    "https://gist.githubusercontent.com/philwinder/1c8153aedf26df48dd94/raw/hello-world.properties"
+    "https://github.com/ContainerSolutions/mesos-framework/releases/download/0.1.0/mesos-framework-0.1.0.jar",
+    "https://github.com/ContainerSolutions/mesosframework/blob/master/docs/examples/hello-world.properties"
   ],
   "env": {
     "JAVA_OPTS": "-Xms32m -Xmx64m"

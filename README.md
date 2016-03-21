@@ -1,13 +1,29 @@
 # mesos-framework
 Create a mesos framework with just an application.properties file!
 
-## Pre-release
-This is a pre-release version. There are no official binaries yet. This is a placeholder and shows intended functionality.
-
 # Introduction
 Writing Frameworks for Apache Mesos is hard. We created the [Mesos Starter](www.github.com/containersolutions/mesos-starter) project to reduce the amount of boilerplate.
 
-Mesos-Framework is a pre-built version of Mesos-Starter, that allows users to run a binary or Docker container as a Framework via a single configuration file.
+MesosFramework is a pre-built version of Mesos-Starter, that allows users to run a binary or Docker container as a Framework via a single configuration file.
+
+# Features
+(Most features come from the [Mesos-Starter](https://github.com/ContainerSolutions/mesos-starter) project)
+
+- [x] State stored in ZooKeeper
+- [x] Mesos Authorisation
+- [ ] ZooKeeper Authorisation (requires testing)
+- [x] Jar mode (no docker)
+- [x] Resource specification (including port)
+- [x] Import Kibana.yml settings file
+- [x] "Spread" orchestration strategy (Spreads instances across distinct hosts)
+- [x] Decoupled from Kibana. Use any version.
+- [x] Decoupled from Mesos. Use any version 0.25+
+- [x] Horizontal scaling via JMX
+
+Added by MesosFramework:
+- [x] Live horizontal scaling via a REST endpoint
+- [x] Single endpoint to check health of all instances
+- [x] Customizable mesos healthcheck command
 
 # Quick start
 Once you have decided upon a binary or Docker container to run, you simply need to call:
@@ -61,5 +77,11 @@ An extra healthchecks to monitor the state of the running tasks is exposed.
  
 ```
 $ curl http://localhost:8080/health
-{"status":"UP","task":{"status":"UP","expectedInstances":1,"instances":1,"TASK_STAGING":0,"TASK_STARTING":0,"TASK_RUNNING":3,"TASK_KILLING":0,"TASK_FINISHED":0,"TASK_FAILED":0,"TASK_KILLED":0,"TASK_LOST":0,"TASK_ERROR":0},"diskSpace":{"status":"UP","total":9896046592,"free":2796249088,"threshold":10485760}}%  
+{"status":"UP","task":{"status":"UP","mesos.resources.count":1,"instances":1,"TASK_STAGING":0,"TASK_STARTING":0,"TASK_RUNNING":3,"TASK_KILLING":0,"TASK_FINISHED":0,"TASK_FAILED":0,"TASK_KILLED":0,"TASK_LOST":0,"TASK_ERROR":0},"diskSpace":{"status":"UP","total":9896046592,"free":2796249088,"threshold":10485760}}%  
 ```
+
+# Sponsors
+This project is sponsored by Cisco Cloud Services.
+
+# License
+Apache License 2.0
