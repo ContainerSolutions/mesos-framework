@@ -22,8 +22,8 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
     @Autowired
     StateRepository stateRepository;
 
-    @Value("${mesos.resources.scale:1}")
-    Integer scale;
+    @Value("${mesos.resources.count:1}")
+    Integer count;
 
     protected Map<String, Protos.TaskStatus> taskStatusMap = new ConcurrentHashMap<>();
 
@@ -37,7 +37,7 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
                 } else {
                     builder.down();
                 }
-                builder.withDetail("expectedInstances", scale);
+                builder.withDetail("mesos.resources.count", count);
                 builder.withDetail("instances", stateRepository.allTaskInfos().size());
 
                 for (Protos.TaskState taskState : Protos.TaskState.values()) {
@@ -60,7 +60,7 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
     }
 
     private boolean correctNumberOfInstances() {
-        return stateRepository.allTaskInfos().size() == scale;
+        return stateRepository.allTaskInfos().size() == count;
     }
 
     private void updateTaskStatusList(StatusUpdateEvent event) {
