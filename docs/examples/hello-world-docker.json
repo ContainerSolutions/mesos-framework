@@ -1,0 +1,34 @@
+{
+  "id": "hello-world-docker",
+  "cpus": 0.1,
+  "mem": 128,
+  "instances": 1,
+  "args": [
+    "--spring.application.name=hello-world-docker",
+    "--mesos.framework.name=hello-world-docker",
+    "--mesos.master=zk://$ZOOKEEPER:2181/mesos",
+    "--mesos.docker.image=training/webapp:latest",
+    "--mesos.docker.network=BRIDGE",
+    "--mesos.resources.mem=64",
+    "--mesos.resources.cpu=0.1",
+    "--mesos.resources.count=3",
+    "--mesos.command=python app.py",
+    "--logging.level.com.containersolutions.mesos=DEBUG",
+    "--mesos.zookeeper.server=$ZOOKEEPER:2181",
+    "--server.port=31100"
+  ],
+  "env": {
+    "JAVA_OPTS": "-Xms32m -Xmx100m"
+  },
+  "container": {
+    "type": "DOCKER",
+    "docker": {
+      "image": "containersol/mesosframework:0.1.0",
+      "network": "BRIDGE"
+    }
+  },
+  "ports": [
+    31100
+  ],
+  "requirePorts": true
+}
