@@ -1,6 +1,8 @@
 package com.containersolutions.mesos.config.autoconfigure;
 
 import com.containersolutions.mesos.HealthCheckFactory;
+import com.containersolutions.mesos.controllers.CountController;
+import com.containersolutions.mesos.scheduler.InstanceCount;
 import com.containersolutions.mesos.scheduler.TaskInfoFactory;
 import com.containersolutions.mesos.scheduler.TaskInfoFactoryCommand;
 import com.containersolutions.mesos.scheduler.TaskInfoFactoryDocker;
@@ -9,6 +11,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.mesos.Protos;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +37,7 @@ public class FrameworkSchedulerConfiguration {
     }
 
     @Bean(name = "defaultTaskInfoFactoryDocker")
+    @ConditionalOnProperty(prefix = "mesos.docker", name = {"image"})
     public TaskInfoFactoryDocker defaulTaskInfoFactoryDocker() {
         return new TaskInfoFactoryDocker();
     }
@@ -48,8 +52,8 @@ public class FrameworkSchedulerConfiguration {
     @ConditionalOnProperty(prefix = "mesos.docker", name = {"image"})
     @Primary
     public TaskInfoFactory taskInfoFactoryDocker(@Qualifier("defaultTaskInfoFactoryDocker") TaskInfoFactoryDocker taskInfoFactoryDocker, HealthCheckFactory healthCheckFactory) {
-        return (taskId, offer, resources) -> {
-            Protos.TaskInfo taskInfo = taskInfoFactoryDocker.create(taskId, offer, resources);
+        return (taskId, offer, resources, executionParameters) -> {
+            Protos.TaskInfo taskInfo = taskInfoFactoryDocker.create(taskId, offer, resources, executionParameters);
             Protos.TaskInfo built = Protos.TaskInfo.newBuilder()
                     .mergeFrom(taskInfo)
                     .setHealthCheck(healthCheckFactory.create(resources))
@@ -63,8 +67,8 @@ public class FrameworkSchedulerConfiguration {
     @ConditionalOnMissingBean(name = "frameworkTaskInfoFactoryDocker")
     @Primary
     public TaskInfoFactory taskInfoFactoryCommand(@Qualifier("defaultTaskInfoFactoryCommand") TaskInfoFactoryCommand taskInfoFactoryCommand, HealthCheckFactory healthCheckFactory) {
-        return (taskId, offer, resources) -> {
-            Protos.TaskInfo taskInfo = taskInfoFactoryCommand.create(taskId, offer, resources);
+        return (taskId, offer, resources, executionParameters) -> {
+            Protos.TaskInfo taskInfo = taskInfoFactoryCommand.create(taskId, offer, resources, executionParameters);
             Protos.TaskInfo built = Protos.TaskInfo.newBuilder()
                     .mergeFrom(taskInfo)
                     .setHealthCheck(healthCheckFactory.create(resources))
@@ -72,5 +76,11 @@ public class FrameworkSchedulerConfiguration {
             logger.debug(built);
             return built;
         };
+    }
+
+    @Bean
+    @ConditionalOnBean(value = InstanceCount.class)
+    public CountController countController(InstanceCount instanceCount) {
+        return new CountController(instanceCount);
     }
 }

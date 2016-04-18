@@ -1,10 +1,10 @@
 package com.containersolutions.mesos.config.autoconfigure;
 
+import com.containersolutions.mesos.scheduler.InstanceCount;
 import com.containersolutions.mesos.scheduler.events.StatusUpdateEvent;
 import com.containersolutions.mesos.scheduler.state.StateRepository;
 import org.apache.mesos.Protos;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.actuate.health.AbstractHealthIndicator;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -22,8 +22,8 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
     @Autowired
     StateRepository stateRepository;
 
-    @Value("${mesos.resources.scale:1}")
-    Integer scale;
+    @Autowired
+    InstanceCount instanceCount;
 
     protected Map<String, Protos.TaskStatus> taskStatusMap = new ConcurrentHashMap<>();
 
@@ -37,7 +37,7 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
                 } else {
                     builder.down();
                 }
-                builder.withDetail("expectedInstances", scale);
+                builder.withDetail("mesos.resources.count", instanceCount.getCount());
                 builder.withDetail("instances", stateRepository.allTaskInfos().size());
 
                 for (Protos.TaskState taskState : Protos.TaskState.values()) {
@@ -60,7 +60,7 @@ public class TaskActuatorConfiguration implements ApplicationListener<StatusUpda
     }
 
     private boolean correctNumberOfInstances() {
-        return stateRepository.allTaskInfos().size() == scale;
+        return stateRepository.allTaskInfos().size() == instanceCount.getCount();
     }
 
     private void updateTaskStatusList(StatusUpdateEvent event) {
